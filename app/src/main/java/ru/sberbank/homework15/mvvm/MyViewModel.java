@@ -1,8 +1,10 @@
 package ru.sberbank.homework15.mvvm;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -40,19 +42,21 @@ public class MyViewModel extends ViewModel {
         return mPictures;
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void getPicturesFromModel() {
-        mService.execute(new Runnable() {
+        new AsyncTask<Void, Void, List<Picture>>() {
+
             @Override
-            public void run() {
-                final List<Picture> list = mModel.getPictures();
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPictures.setValue(list);
-                    }
-                });
+            protected List<Picture> doInBackground(Void... voids) {
+                return mModel.getPictures();
             }
-        });
+
+            @Override
+            protected void onPostExecute(List<Picture> pictures) {
+                super.onPostExecute(pictures);
+                mPictures.setValue(pictures);
+            }
+        }.execute();
     }
 
 

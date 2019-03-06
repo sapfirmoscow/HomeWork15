@@ -8,6 +8,7 @@ import com.squareup.picasso.Picasso;
 
 import ru.sberbank.homework15.R;
 import ru.sberbank.homework15.databinding.ImageItemBinding;
+import ru.sberbank.homework15.model.Picture;
 
 public class ImageViewHolder extends RecyclerView.ViewHolder {
 
@@ -20,7 +21,7 @@ public class ImageViewHolder extends RecyclerView.ViewHolder {
         mImageView = mItem.getRoot().findViewById(R.id.imageView);
     }
 
-    public void setImage(String uri) {
+    private void setImage(String uri) {
         Picasso.get()
                 .load(uri)
                 .placeholder(R.drawable.ic_launcher_background)
@@ -29,12 +30,9 @@ public class ImageViewHolder extends RecyclerView.ViewHolder {
                 .into(mImageView);
     }
 
-    ImageItemBinding getBinding() {
-        return mItem;
+    public void bind(Picture picture, PictureEventListener listener) {
+        setImage(picture.getUrls().getThumb());
+        mItem.setPicture(picture);
+        mItem.setOnClickListener(listener);
     }
-
-    ImageView getImageView() {
-        return mImageView;
-    }
-
 }

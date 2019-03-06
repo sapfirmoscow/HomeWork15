@@ -33,9 +33,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageViewHolder> implemen
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder imageViewHolder, int i) {
-        imageViewHolder.setImage(mData.get(i).getUrls().getThumb());
-        imageViewHolder.getBinding().setPicture(mData.get(i));
-        imageViewHolder.getBinding().setOnClickListener(this);
+        imageViewHolder.bind(mData.get(i), this);
     }
 
     @Override

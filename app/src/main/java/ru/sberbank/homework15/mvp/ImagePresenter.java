@@ -1,10 +1,12 @@
 package ru.sberbank.homework15.mvp;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+
+import java.io.IOException;
 
 public class ImagePresenter {
     private MyImageView mView;
@@ -14,23 +16,26 @@ public class ImagePresenter {
         mUrl = url;
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void onResume() {
-        Target target = new Target() {
+        new AsyncTask<Void, Void, Bitmap>() {
             @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            protected Bitmap doInBackground(Void... voids) {
+                Bitmap bitmap = null;
+                try {
+                    bitmap = Picasso.get().load(mUrl).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return bitmap;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                super.onPostExecute(bitmap);
                 mView.setPicture(bitmap);
             }
-
-            @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-            }
-        };
-
-        Picasso.get().load(mUrl).into(target);
+        }.execute();
     }
 
     public void setActivity(MyImageView view) {

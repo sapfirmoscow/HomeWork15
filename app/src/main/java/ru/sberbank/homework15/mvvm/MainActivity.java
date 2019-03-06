@@ -24,11 +24,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         final ActivityMainBinding mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainBinding.recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mainBinding.recyclerView.addItemDecoration(new SpacesItemDecoration(25));
         mAdapater = new ImageAdapter(MainActivity.this);
+        mainBinding.recyclerView.setAdapter(mAdapater);
 
         final MyViewModel myViewModel = ViewModelProviders.of(this).get(MyViewModel.class);
         myViewModel.getPictures().observe(this, new Observer<List<Picture>>() {
